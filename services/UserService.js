@@ -19,6 +19,7 @@ export async function CreateUser({ name, email, password, role })
 export async function LoginUser({ email, password })
 {
     const user = await User.findOne({ email });
+    console.log(user);
     if (!user) throw new Error('Invalid email');
 
     const isValidPassword = await Compare(password, user.password);
