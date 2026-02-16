@@ -49,7 +49,16 @@ export async function RegisterUser(req, res)
 
     try
     {
-        const User = await CreateUserService({name, email, password, role});
+        const {token, ...User} = await CreateUserService({name, email, password, role});
+        
+        res.cookie('token', token,
+        {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'Strict',
+            maxAge: 24 * 60 * 60 * 1000 // 1 day
+        });
+        
         return res.json(User);
     }
     catch(err)
