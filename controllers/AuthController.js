@@ -21,7 +21,7 @@ export async function LoginUser(req,res)
         {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'Strict',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
             maxAge: 24 * 60 * 60 * 1000 // 1 day
         });
 
@@ -30,7 +30,7 @@ export async function LoginUser(req,res)
     catch(err)
     {
         console.error('Error occured while login', err);
-        return res.json(err)
+        return res.status(500).json({ message: err.message || 'Internal Server Error' });
     }
 }
 
@@ -55,7 +55,7 @@ export async function RegisterUser(req, res)
         {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'Strict',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
             maxAge: 24 * 60 * 60 * 1000 // 1 day
         });
         
@@ -64,6 +64,6 @@ export async function RegisterUser(req, res)
     catch(err)
     {
         console.log('Error occured while registering user', err);
-        return res.json(err);
+        return res.status(500).json({ message: err.message || 'Internal Server Error' });
     }
 }
