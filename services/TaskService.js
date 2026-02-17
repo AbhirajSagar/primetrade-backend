@@ -49,12 +49,12 @@ export async function UpdateTask({ id, user_id, role, ...fields })
 
 export async function DeleteTask({ id, user_id, role })
 {
-    const task = await Task.findById(id);
+    const task = await Task.findByIdAndDelete(id);
     if(!task) throw new Error('Task not found');
-    
+
     if(task.user.toString() !== user_id && role !== 'admin') 
         throw new Error('Unauthorized to delete the task');
 
-    await task.remove();
+    await Task.findByIdAndDelete(id);
     return new DeleteTaskResponse(task);
 }
